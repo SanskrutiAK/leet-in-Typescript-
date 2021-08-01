@@ -1,72 +1,45 @@
 function spiralOrder(matrix: number[][]): number[] {
 let solution:number[] = [];
-let visited:boolean[][] = [];
-let iteration:number = 1;
-let nrow:number = matrix.length;
-let ncol:number = matrix[0].length;
+let nrow:number = matrix.length-1;
+let ncol:number = matrix[0].length-1;
+let rowStart = 0;
+let colStart = 0;
 let row=0;
 let col=0;
-for(let i=0; i<nrow; i++){
-    let newArr = [];
-    for(let j=0; j<ncol; j++){
-        newArr.push(false);
+while(rowStart<=nrow && colStart<=ncol){
+    //first row
+    for(let j = colStart; j<=ncol; j++) {
+        solution.push(matrix[rowStart][j]);
     }
-    visited.push(newArr);
-}
+    rowStart++;
 
-/**
- * if(iteration%2 == 0) ==> Traverse column
- * if(iteration%2 == 0) ==> Traverse row
- */
- solution.push(matrix[0][0]);
-if(iteration%2 == 0){
-    console.log("HERE");
-    if(row == 0){
-        while(row<=nrow ){
-            row++;
-            if(visited[row][col] == true){
-                break;
-            }
-            solution.push(matrix[row][col]);
-            visited[row][col] = true;
-        }
+    //last column
+    for(let i = rowStart; i<=nrow; i++){
+        solution.push(matrix[i][ncol]);
+        row = i;
     }
-    if(row == nrow-1){
-        while(row>=0){
-            row++;
-            if(visited[row][col] == true){
-                break;
-            }
-            solution.push(matrix[row][col]);
-            visited[row][col] = true;
-        }
-    }
-    iteration++;
-}else{
-    if(col == 0){
-        while(col<=ncol-1){
-            col++;
-            if(visited[row][col] == true){
-                break;
-            }
-            solution.push(matrix[row][col]);
-            visited[row][col] = true;
-        }
-    }else if(col == ncol-1){
-        while(col>=0){
-            col--;
-            if(visited[row][col] == true){
-                break;
-            }
-            solution.push(matrix[row][col]);
-            visited[row][col] = true;
-        }
-    }
-    iteration++;
-}
+    ncol--;
 
+    //last Row
+    if(colStart<=ncol){
+        for(let j = ncol; j>=colStart; j--){
+            solution.push(matrix[nrow][j]);
+        }
+        nrow--;
+    }
+
+    if(rowStart<=nrow){
+        for(let i = nrow; i>=rowStart; i--){
+            solution.push(matrix[i][colStart]);
+        }
+        colStart++;
+    }
+}
 
 return solution;
 };
 
-console.log(spiralOrder([[1,2,3],[4,5,6],[7,8,9]]));
+console.log(spiralOrder([[1, 2, 3, 4, 5],
+    [6, 7, 8, 9, 10],
+    [11, 12, 13, 14, 15],
+    [16, 17, 18, 19, 20]]));
